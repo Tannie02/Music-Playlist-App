@@ -5,7 +5,9 @@ import Sidebar from "./components/Sidebar";
 import Home from "./pages/Home";
 import "./App.css";
 import "./index.css";
-
+import Playlists from "./pages/Playlists";
+import PlaylistDetails from "./pages/PlaylistDetails";
+import Favorites from "./pages/Favorites";
 function PlaceholderPage({ title }) {
   return (
     <main className="home-page">
@@ -33,21 +35,18 @@ function AppLayout() {
               element={<PlaceholderPage title="Search Songs" />}
             />
             <Route
-              path="/favorites"
-              element={<PlaceholderPage title="Your Favorites" />}
-            />
-            <Route
-              path="/playlists"
-              element={<PlaceholderPage title="Your Playlists" />}
-            />
+  path="/favorites"
+  element={<Favorites />}
+/>
+            <Route path="/playlists" element={<Playlists />} />
             <Route
               path="/song/:id"
               element={<PlaceholderPage title="Song Details" />}
             />
             <Route
-              path="/playlist/:id"
-              element={<PlaceholderPage title="Playlist Details" />}
-            />
+  path="/playlist/:id"
+  element={<PlaylistDetails />}
+/>
             <Route
               path="*"
               element={<PlaceholderPage title="Page Not Found" />}

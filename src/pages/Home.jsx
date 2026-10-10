@@ -1,9 +1,12 @@
-import { useState } from "react";
-import songs from "../data/song";
 
-const genres = ["All", ...new Set(songs.map((song) => song.genre))];
+import { useState } from "react";
+import { useMusic } from "../context/MusicContext";
+import { Link } from "react-router-dom";
+
+const genres = ["All", "Other", "Indie", "Pop"];
 
 function Home() {
+  const { songs, favorites, toggleFavorite } = useMusic();
   const [selectedGenre, setSelectedGenre] = useState("All");
 
   const filteredSongs =
@@ -60,21 +63,55 @@ function Home() {
         </div>
 
         <div className="song-grid">
-          {filteredSongs.map((song) => (
-            <article className="home-song-card" key={song.id}>
-              <div className="song-image-wrapper">
-                <img
-                  src={song.image}
-                  alt={`${song.title} cover`}
-                  className="home-song-image"
-                  loading="lazy"
-                />
-              </div>
+          {filteredSongs.map((song) => {
+            const isFavorite = favorites.includes(song.id);
 
-              <h3>{song.title}</h3>
-              <p>{song.artist}</p>
-            </article>
-          ))}
+            return (
+              <article className="home-song-card" key={song.id}>
+                <Link
+                  to={`/song/${song.id}`}
+                  style={{ color: "inherit", textDecoration: "none" }}
+                >
+                  <div className="song-image-wrapper">
+                    <img
+                      src={song.image}
+                      alt={`${song.title} cover`}
+                      className="home-song-image"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <h3>{song.title}</h3>
+                  <p>{song.artist}</p>
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={() => toggleFavorite(song.id)}
+                  aria-label={
+                    isFavorite
+                      ? `Remove ${song.title} from favorites`
+                      : `Add ${song.title} to favorites`
+                  }
+                  title={
+                    isFavorite
+                      ? "Remove from favorites"
+                      : "Add to favorites"
+                  }
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    color: isFavorite ? "#F472B6" : "#C4B5FD",
+                    fontSize: "24px",
+                    cursor: "pointer",
+                    padding: "4px 0",
+                  }}
+                >
+                  {isFavorite ? "♥" : "♡"}
+                </button>
+              </article>
+            );
+          })}
         </div>
 
         {filteredSongs.length === 0 && (
@@ -97,4 +134,4 @@ function Home() {
   );
 }
 
-export default Home
+export default Home;

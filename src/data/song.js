@@ -1,0 +1,58 @@
+const songs = [
+  {
+    id: 1,
+    title: "Dracula",
+    artist: "Unknown Artist",
+    genre: "Other",
+    album: "My Library",
+    image: "/images/dracula.jpg",
+    audio: "/music/Dracula.mp3",
+  },
+  {
+    id: 2,
+    title: "KALYANI",
+    artist: "Unknown Artist",
+    genre: "Other",
+    album: "My Library",
+    image: "/images/kalyani.jpg",
+    audio: "/music/KALYANI.mp3",
+  },
+  {
+    id: 3,
+    title: "Magale",
+    artist: "Unknown Artist",
+    genre: "Other",
+    album: "My Library",
+    image: "/images/magale.jpg",
+    audio: "/music/Magale%20.mp3",
+  },
+  {
+    id: 4,
+    title: "Rathinamo",
+    artist: "Unknown Artist",
+    genre: "Other",
+    album: "My Library",
+    image: "/images/rathinamo.jpg",
+    audio: "/music/Rathinamo%20.mp3",
+  },
+  {
+    id: 5,
+    title: "Sweater Weather",
+    artist: "The Neighbourhood",
+    genre: "Indie",
+    album: "I Love You.",
+    image: "/images/sweater.jpg",
+    audio: "/music/Sweater%20Weather.mp3",
+  },
+  {
+    id: 6,
+    title: "Training Season",
+    artist: "Dua Lipa",
+    genre: "Pop",
+    album: "Radical Optimism",
+    image: "/images/training.jpg",
+    audio: "/music/Training%20Season.mp3",
+  },
+];
+
+export default songs;

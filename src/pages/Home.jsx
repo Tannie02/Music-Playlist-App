@@ -2,11 +2,11 @@
 import { useState } from "react";
 import { useMusic } from "../context/MusicContext";
 import { Link } from "react-router-dom";
-
+import RecentlyPlayed from "../components/RecentlyPlayed";
 const genres = ["All", "Other", "Indie", "Pop"];
 
 function Home() {
-  const { songs, favorites, toggleFavorite } = useMusic();
+  const { songs, favorites, toggleFavorite, playSong } = useMusic();
   const [selectedGenre, setSelectedGenre] = useState("All");
 
   const filteredSongs =
@@ -30,9 +30,8 @@ function Home() {
             <button
               key={genre}
               type="button"
-              className={`genre-chip ${
-                selectedGenre === genre ? "selected" : ""
-              }`}
+              className={`genre-chip ${selectedGenre === genre ? "selected" : ""
+                }`}
               onClick={() => setSelectedGenre(genre)}
             >
               {genre}
@@ -50,6 +49,7 @@ function Home() {
               {filteredSongs.length === 1 ? "song" : "songs"} in your collection
             </p>
           </div>
+
 
           {selectedGenre !== "All" && (
             <button
@@ -70,6 +70,7 @@ function Home() {
               <article className="home-song-card" key={song.id}>
                 <Link
                   to={`/song/${song.id}`}
+                  onClick={() => playSong(song.id)}
                   style={{ color: "inherit", textDecoration: "none" }}
                 >
                   <div className="song-image-wrapper">
@@ -114,21 +115,16 @@ function Home() {
           })}
         </div>
 
+
         {filteredSongs.length === 0 && (
           <p className="empty-playlists">
             No songs found in this genre.
           </p>
         )}
       </section>
-
-      <section className="home-section recently-section">
-        <div className="section-heading">
-          <h2>Recently Played</h2>
-        </div>
-
-        <p className="empty-playlists">
-          Songs you listen to will appear here.
-        </p>
+      <section className="home-section recently-played-section">
+        <h2 className="recently-played-title">Recently Played</h2>
+        <RecentlyPlayed />
       </section>
     </main>
   );

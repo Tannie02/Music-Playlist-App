@@ -5,9 +5,19 @@ import songs from "../data/song.js";
 const MusicContext = createContext();
 
 export function MusicProvider({ children }) {
+  const [currentSongId, setCurrentSongId] = useState(null);
   const [playlists, setPlaylists] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("soundify-playlists")) || [];
+    } catch {
+      return [];
+    }
+  });
+  const [recentlyPlayed, setRecentlyPlayed] = useState(() => {
+    try {
+      return JSON.parse(
+        localStorage.getItem("soundify-recently-played")
+      ) || [];
     } catch {
       return [];
     }
@@ -28,6 +38,13 @@ export function MusicProvider({ children }) {
   useEffect(() => {
     localStorage.setItem("soundify-favorites", JSON.stringify(favorites));
   }, [favorites]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "soundify-recently-played",
+      JSON.stringify(recentlyPlayed)
+    );
+  }, [recentlyPlayed]);
 
   function createPlaylist(name) {
     const trimmedName = name.trim();
@@ -85,6 +102,35 @@ export function MusicProvider({ children }) {
     );
   }
 
+  function playSong(songId) {
+    setCurrentSongId(songId);
+    setRecentlyPlayed((current) => [
+      songId,
+      ...current.filter((id) => id !== songId),
+    ].slice(0, 10));
+  }
+
+  function playNextSong() {
+    if (!songs.length) return;
+
+    const currentIndex = songs.findIndex(
+      (song) => song.id === currentSongId
+    );
+    const nextIndex = (currentIndex + 1) % songs.length;
+    playSong(songs[nextIndex].id);
+  }
+
+  function playPreviousSong() {
+    if (!songs.length) return;
+
+    const currentIndex = songs.findIndex(
+      (song) => song.id === currentSongId
+    );
+    const previousIndex =
+      currentIndex <= 0 ? songs.length - 1 : currentIndex - 1;
+    playSong(songs[previousIndex].id);
+  }
+
   return (
     <MusicContext.Provider
       value={{
@@ -96,6 +142,11 @@ export function MusicProvider({ children }) {
         addSongToPlaylist,
         removeSongFromPlaylist,
         toggleFavorite,
+        currentSongId,
+        recentlyPlayed,
+        playSong,
+        playNextSong,
+        playPreviousSong,
       }}
     >
       {children}

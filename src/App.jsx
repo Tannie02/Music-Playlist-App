@@ -8,6 +8,8 @@ import "./index.css";
 import Playlists from "./pages/Playlists";
 import PlaylistDetails from "./pages/PlaylistDetails";
 import Favorites from "./pages/Favorites";
+import MusicPlayer from "./components/MusicPlayer";
+import RecentlyPlayed from "./components/RecentlyPlayed";
 function PlaceholderPage({ title }) {
   return (
     <main className="home-page">
@@ -35,18 +37,18 @@ function AppLayout() {
               element={<PlaceholderPage title="Search Songs" />}
             />
             <Route
-  path="/favorites"
-  element={<Favorites />}
-/>
+              path="/favorites"
+              element={<Favorites />}
+            />
             <Route path="/playlists" element={<Playlists />} />
             <Route
               path="/song/:id"
               element={<PlaceholderPage title="Song Details" />}
             />
             <Route
-  path="/playlist/:id"
-  element={<PlaylistDetails />}
-/>
+              path="/playlist/:id"
+              element={<PlaylistDetails />}
+            />
             <Route
               path="*"
               element={<PlaceholderPage title="Page Not Found" />}
@@ -54,6 +56,7 @@ function AppLayout() {
           </Routes>
         </div>
       </div>
+      <MusicPlayer />
     </div>
   );
 }

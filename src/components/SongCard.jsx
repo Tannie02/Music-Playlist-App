@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useMusic } from "../context/MusicContext";
 
 function SongCard({ song }) {
-  const { favorites, toggleFavorite } = useMusic();
+  const { favorites, toggleFavorite, playSong } = useMusic();
 
   const isFavorite = favorites.includes(song.id);
 
@@ -10,6 +10,7 @@ function SongCard({ song }) {
     <div className="song-card">
       <Link
         to={`/song/${song.id}`}
+        onClick={() => playSong(song.id)}
         style={{ textDecoration: "none", color: "inherit" }}
       >
         <img src={song.image} alt={song.title} />

@@ -1,18 +1,29 @@
-
 import { useState } from "react";
 import { useMusic } from "../context/MusicContext";
 import { Link } from "react-router-dom";
 import RecentlyPlayed from "../components/RecentlyPlayed";
+
 const genres = ["All", "Other", "Indie", "Pop"];
 
-function Home() {
+function Home({ searchQuery = "" }) {
   const { songs, favorites, toggleFavorite, playSong } = useMusic();
-  const [selectedGenre, setSelectedGenre] = useState("All");
 
-  const filteredSongs =
-    selectedGenre === "All"
-      ? songs
-      : songs.filter((song) => song.genre === selectedGenre);
+  const [selectedGenre, setSelectedGenre] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredSongs = songs.filter((song) => {
+    const matchesGenre =
+      selectedGenre === "All" || song.genre === selectedGenre;
+
+    const query = searchQuery.trim().toLowerCase();
+
+    const matchesSearch =
+      `${song.title} ${song.artist} ${song.album || ""}`
+        .toLowerCase()
+        .includes(query);
+
+    return matchesGenre && matchesSearch;
+  });
 
   return (
     <main className="home-page">
@@ -30,8 +41,9 @@ function Home() {
             <button
               key={genre}
               type="button"
-              className={`genre-chip ${selectedGenre === genre ? "selected" : ""
-                }`}
+              className={`genre-chip ${
+                selectedGenre === genre ? "selected" : ""
+              }`}
               onClick={() => setSelectedGenre(genre)}
             >
               {genre}
@@ -50,12 +62,14 @@ function Home() {
             </p>
           </div>
 
-
-          {selectedGenre !== "All" && (
+          {(selectedGenre !== "All" || searchTerm !== "") && (
             <button
               className="see-all-button"
               type="button"
-              onClick={() => setSelectedGenre("All")}
+              onClick={() => {
+                setSelectedGenre("All");
+                setSearchTerm("");
+              }}
             >
               Show all
             </button>
@@ -115,13 +129,13 @@ function Home() {
           })}
         </div>
 
-
         {filteredSongs.length === 0 && (
           <p className="empty-playlists">
-            No songs found in this genre.
+            No matching songs found. Try another song, artist, or genre.
           </p>
         )}
       </section>
+
       <section className="home-section recently-played-section">
         <h2 className="recently-played-title">Recently Played</h2>
         <RecentlyPlayed />

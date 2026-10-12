@@ -1,11 +1,17 @@
-
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import songs from "../data/song.js";
 
 const MusicContext = createContext();
 
 export function MusicProvider({ children }) {
   const [currentSongId, setCurrentSongId] = useState(null);
+  const [shouldPlay, setShouldPlay] = useState(false);
+
   const [playlists, setPlaylists] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("soundify-playlists")) || [];
@@ -13,11 +19,12 @@ export function MusicProvider({ children }) {
       return [];
     }
   });
+
   const [recentlyPlayed, setRecentlyPlayed] = useState(() => {
     try {
-      return JSON.parse(
-        localStorage.getItem("soundify-recently-played")
-      ) || [];
+      return (
+        JSON.parse(localStorage.getItem("soundify-recently-played")) || []
+      );
     } catch {
       return [];
     }
@@ -48,7 +55,6 @@ export function MusicProvider({ children }) {
 
   function createPlaylist(name) {
     const trimmedName = name.trim();
-
     if (!trimmedName) return;
 
     setPlaylists((current) => [
@@ -104,10 +110,11 @@ export function MusicProvider({ children }) {
 
   function playSong(songId) {
     setCurrentSongId(songId);
-    setRecentlyPlayed((current) => [
-      songId,
-      ...current.filter((id) => id !== songId),
-    ].slice(0, 10));
+    setShouldPlay(true);
+
+    setRecentlyPlayed((current) =>
+      [songId, ...current.filter((id) => id !== songId)].slice(0, 10)
+    );
   }
 
   function playNextSong() {
@@ -117,6 +124,7 @@ export function MusicProvider({ children }) {
       (song) => song.id === currentSongId
     );
     const nextIndex = (currentIndex + 1) % songs.length;
+
     playSong(songs[nextIndex].id);
   }
 
@@ -128,6 +136,7 @@ export function MusicProvider({ children }) {
     );
     const previousIndex =
       currentIndex <= 0 ? songs.length - 1 : currentIndex - 1;
+
     playSong(songs[previousIndex].id);
   }
 
@@ -137,13 +146,15 @@ export function MusicProvider({ children }) {
         songs,
         playlists,
         favorites,
+        recentlyPlayed,
+        currentSongId,
+        shouldPlay,
+        setShouldPlay,
         createPlaylist,
         deletePlaylist,
         addSongToPlaylist,
         removeSongFromPlaylist,
         toggleFavorite,
-        currentSongId,
-        recentlyPlayed,
         playSong,
         playNextSong,
         playPreviousSong,

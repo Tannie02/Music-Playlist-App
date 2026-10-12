@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
@@ -8,6 +9,7 @@ import "./index.css";
 import Playlists from "./pages/Playlists";
 import PlaylistDetails from "./pages/PlaylistDetails";
 import Favorites from "./pages/Favorites";
+
 function PlaceholderPage({ title }) {
   return (
     <main className="home-page">
@@ -20,33 +22,60 @@ function PlaceholderPage({ title }) {
 }
 
 function AppLayout() {
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <div className="music-app">
-      <Navbar />
+      <Navbar
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
 
       <div className="music-body">
         <Sidebar />
 
         <div className="music-main-content">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route
+              path="/"
+              element={
+                <Home
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                />
+              }
+            />
+
             <Route
               path="/search"
-              element={<PlaceholderPage title="Search Songs" />}
+              element={
+                <Home
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                />
+              }
             />
+
             <Route
-  path="/favorites"
-  element={<Favorites />}
-/>
-            <Route path="/playlists" element={<Playlists />} />
+              path="/favorites"
+              element={<Favorites />}
+            />
+
+            <Route
+              path="/playlists"
+              element={<Playlists />}
+            />
+
             <Route
               path="/song/:id"
               element={<PlaceholderPage title="Song Details" />}
             />
+
             <Route
-  path="/playlist/:id"
-  element={<PlaylistDetails />}
-/>
+              path="/playlist/:id"
+              element={<PlaylistDetails />}
+            />
+
             <Route
               path="*"
               element={<PlaceholderPage title="Page Not Found" />}

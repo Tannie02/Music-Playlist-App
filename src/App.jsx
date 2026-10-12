@@ -70,3 +70,57 @@ function App() {
 }
 
 export default App;
+import { useState } from "react";
+import SongList from "./components/SongList";
+import "./App.css";
+
+function App() {
+  const [activeMenu, setActiveMenu] = useState("Home");
+
+  return (
+    <div className="app">
+      <aside className="sidebar">
+        <h2 className="logo">♫ Music Vibes</h2>
+
+        {["Home", "Favorites", "Playlists", "Recently Played"].map(
+          (item) => (
+            <button
+              key={item}
+              className={
+                activeMenu === item ? "menu-item active" : "menu-item"
+              }
+              onClick={() => setActiveMenu(item)}
+            >
+              {item}
+            </button>
+          )
+        )}
+
+        <div className="sidebar-note">
+          <span>🎧</span>
+          <h3>Good music, good mood.</h3>
+          <p>Find your next favourite song.</p>
+        </div>
+      </aside>
+
+      <main className="main-content">
+        <header className="hero">
+          <div>
+            <p className="welcome">WELCOME TO MUSIC VIBES</p>
+            <h1>Your Music Playlist <span>♫</span></h1>
+            <p className="subtitle">
+              Discover your favourite songs. Feel every beat.
+            </p>
+          </div>
+          <div className="hero-art">🎧</div>
+        </header>
+
+        <SongList />
+        
+        <footer>♫ Music brings people together ♥</footer>
+      </main>
+    </div>
+  );
+}
+
+export default App;

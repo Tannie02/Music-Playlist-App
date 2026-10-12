@@ -53,6 +53,42 @@ const songs = [
     image: "/images/training.jpg",
     audio: "/music/Training%20Season.mp3",
   },
+  {
+    id: 7,
+    title: "Lush Life",
+    artist: "Zara Larsson",
+    genre: "Pop",
+    album: "Lush Life",
+    image: "/images/lushlife.jpg",
+    audio: "/music/Lush%20Life.mp3",
+  },
+  {
+    id: 8,
+    title: "Blinding Lights",
+    artist: "The Weeknd",
+    genre: "Pop",
+    album: "After Hours",
+    image: "/images/training.jpg",
+    audio: "/music/The%20Weeknd%20-%20Blinding%20Lights%20(Official%20Audio).mp3",
+  },
+  {
+    id: 9,
+    title: "Easy On Me",
+    artist: "Adele",
+    genre: "Pop",
+    album: "30",
+    image: "/images/eaasyonme.jpg",
+    audio: "/music/Easy%20On%20Me%20-%20Adele.mp3",
+  },
+  {
+    id: 10,
+    title: "Mantra",
+    artist: "JENNIE",
+    genre: "Pop",
+    album: "Mantra",
+    image: "/images/mantra.jpg",
+    audio: "/music/JENNIE%20(BLACKPINK)%20-%20Mantra.mp3",
+  },
 ];
 
 export default songs;

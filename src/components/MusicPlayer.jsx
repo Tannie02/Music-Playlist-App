@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import { useMusic } from "../context/MusicContext";
 
@@ -38,9 +37,10 @@ export default function MusicPlayer() {
   const {
     songs,
     currentSongId,
-    playSong,
     playNextSong,
     playPreviousSong,
+    shouldPlay,
+    setShouldPlay,
   } = useMusic();
 
   const audioRef = useRef(null);
@@ -62,6 +62,35 @@ export default function MusicPlayer() {
     setIsPlaying(false);
     audio.load();
   }, [currentSongId]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !currentSong || !shouldPlay) return;
+
+    let cancelled = false;
+
+    async function startPlayback() {
+      try {
+        await audio.play();
+
+        if (!cancelled) {
+          setShouldPlay(false);
+        }
+      } catch (error) {
+        console.error("Audio playback failed:", error);
+
+        if (!cancelled) {
+          setShouldPlay(false);
+        }
+      }
+    }
+
+    startPlayback();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [shouldPlay, currentSongId, currentSong, setShouldPlay]);
 
   async function togglePlay() {
     const audio = audioRef.current;
@@ -109,6 +138,9 @@ export default function MusicPlayer() {
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onEnded={playNextSong}
+        onError={() =>
+          console.error("Unable to load audio:", currentSong.audio)
+        }
       />
 
       <div className="player-song-info">

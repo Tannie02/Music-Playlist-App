@@ -1,15 +1,23 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import Home from "./pages/Home";
-import "./App.css";
-import "./index.css";
 import Playlists from "./pages/Playlists";
 import PlaylistDetails from "./pages/PlaylistDetails";
 import Favorites from "./pages/Favorites";
 import MusicPlayer from "./components/MusicPlayer";
 import SongDetails from "./pages/SongDetails";
+import Search from "./pages/Search";
+
+import "./App.css";
+import "./index.css";
 
 function PlaceholderPage({ title }) {
   return (
@@ -24,13 +32,16 @@ function PlaceholderPage({ title }) {
 
 function AppLayout() {
   const [searchQuery, setSearchQuery] = useState("");
+  const location = useLocation();
+
+  // Show Navbar only on the Home page
+  const showNavbar = location.pathname === "/";
 
   return (
     <div className="music-app">
-      <Navbar
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-      />
+      {showNavbar && (
+        <Navbar/>
+      )}
 
       <div className="music-body">
         <Sidebar />
@@ -46,17 +57,20 @@ function AppLayout() {
                 />
               }
             />
-            <Route
-              path="/search"
-              element={<PlaceholderPage title="Search Songs" />}
-            />
+
+            <Route path="/search" element={<Search />} />
+
             <Route path="/favorites" element={<Favorites />} />
+
             <Route path="/playlists" element={<Playlists />} />
+
             <Route path="/song/:id" element={<SongDetails />} />
+
             <Route
               path="/playlist/:id"
               element={<PlaylistDetails />}
             />
+
             <Route
               path="*"
               element={<PlaceholderPage title="Page Not Found" />}

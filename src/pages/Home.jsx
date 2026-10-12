@@ -1,29 +1,10 @@
-import { useState } from "react";
+
 import { useMusic } from "../context/MusicContext";
 import { Link } from "react-router-dom";
 import RecentlyPlayed from "../components/RecentlyPlayed";
 
-const genres = ["All", "Other", "Indie", "Pop"];
-
-function Home({ searchQuery = "" }) {
+function Home() {
   const { songs, favorites, toggleFavorite, playSong } = useMusic();
-
-  const [selectedGenre, setSelectedGenre] = useState("All");
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const filteredSongs = songs.filter((song) => {
-    const matchesGenre =
-      selectedGenre === "All" || song.genre === selectedGenre;
-
-    const query = searchQuery.trim().toLowerCase();
-
-    const matchesSearch =
-      `${song.title} ${song.artist} ${song.album || ""}`
-        .toLowerCase()
-        .includes(query);
-
-    return matchesGenre && matchesSearch;
-  });
 
   return (
     <main className="home-page">
@@ -35,49 +16,19 @@ function Home({ searchQuery = "" }) {
         </p>
       </section>
 
-      <section className="genre-section">
-        <div className="genre-list">
-          {genres.map((genre) => (
-            <button
-              key={genre}
-              type="button"
-              className={`genre-chip ${
-                selectedGenre === genre ? "selected" : ""
-              }`}
-              onClick={() => setSelectedGenre(genre)}
-            >
-              {genre}
-            </button>
-          ))}
-        </div>
-      </section>
-
       <section className="home-section">
         <div className="section-heading">
           <div>
             <h2>Your Music</h2>
             <p className="home-subtitle">
-              {filteredSongs.length}{" "}
-              {filteredSongs.length === 1 ? "song" : "songs"} in your collection
+              {songs.length}{" "}
+              {songs.length === 1 ? "song" : "songs"} in your collection
             </p>
           </div>
-
-          {(selectedGenre !== "All" || searchTerm !== "") && (
-            <button
-              className="see-all-button"
-              type="button"
-              onClick={() => {
-                setSelectedGenre("All");
-                setSearchTerm("");
-              }}
-            >
-              Show all
-            </button>
-          )}
         </div>
 
         <div className="song-grid">
-          {filteredSongs.map((song) => {
+          {songs.map((song) => {
             const isFavorite = favorites.includes(song.id);
 
             return (
@@ -85,7 +36,10 @@ function Home({ searchQuery = "" }) {
                 <Link
                   to={`/song/${song.id}`}
                   onClick={() => playSong(song.id)}
-                  style={{ color: "inherit", textDecoration: "none" }}
+                  style={{
+                    color: "inherit",
+                    textDecoration: "none",
+                  }}
                 >
                   <div className="song-image-wrapper">
                     <img
@@ -129,9 +83,9 @@ function Home({ searchQuery = "" }) {
           })}
         </div>
 
-        {filteredSongs.length === 0 && (
+        {songs.length === 0 && (
           <p className="empty-playlists">
-            No matching songs found. Try another song, artist, or genre.
+            No songs have been added yet.
           </p>
         )}
       </section>

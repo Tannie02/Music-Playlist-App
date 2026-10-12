@@ -1,30 +1,35 @@
 
 import { Link } from "react-router-dom";
 
-function Navbar({ searchQuery = "", onSearchChange }) {
+function Navbar() {
   return (
     <header className="music-navbar">
       <Link to="/" className="music-brand">
         <span className="brand-icon">♫</span>
-        <span>Soundify</span>
+
+        <span className="brand-text">
+          <span className="brand-name">Soundify</span>
+          <span className="brand-tagline">
+            YOUR SOUND. YOUR WORLD.
+          </span>
+        </span>
       </Link>
 
-      <div className="navbar-search">
-        <span className="search-icon">⌕</span>
-        <input
-          type="search"
-          placeholder="Search songs, artists or albums..."
-          aria-label="Search songs, artists or albums"
-          value={searchQuery}
-          onChange={(event) =>
-            onSearchChange?.(event.target.value)
-          }
-        />
+      <div className="navbar-right">
+        <div className="listening-space">
+          <span className="headphone-icon">♬</span>
+          <span>Your listening space</span>
+        </div>
+
+        <Link
+          to="/playlists"
+          className="navbar-library-link"
+          aria-label="Your Library"
+          title="Your Library"
+        >
+           ♬
+        </Link>
       </div>
-
-      <Link to="/playlists" className="navbar-library-link">
-        Your Library
-      </Link>
     </header>
   );
 }
